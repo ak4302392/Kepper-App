@@ -1,34 +1,31 @@
 import React, { useState } from "react";
-import Header from "./Header";
-import Footer from "./Footer";
-import Note from "./Note";
-import CreateArea from "./CreateArea";
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
+import Note from "./Components/Note";
+import CreateArea from "./Components/CreateArea";
 
 function App() {
-  const [noteList, setNoteList] = useState([]);
+  const [notes, setNotes] = useState([]);
 
-  function handleAdd(currText) {
-    if (currText.title === "" || currText.content === "") {
-      alert("title/content missing");
-    } else {
-      setNoteList((prevList) => {
-        return [...prevList, currText];
-      });
-    }
+  function addNote(newNote) {
+    setNotes(prevNotes => {
+      return [...prevNotes, newNote];
+    });
   }
 
   function deleteNote(id) {
-    setNoteList((prevList) => {
-       return prevList.filter((noteItem, index) => {
+    setNotes(prevNotes => {
+      return prevNotes.filter((noteItem, index) => {
         return index !== id;
       });
     });
   }
+
   return (
     <div>
       <Header />
-      <CreateArea addClick={handleAdd} />
-      {noteList.map((noteItem, index) => {
+      <CreateArea onAdd={addNote} />
+      {notes.map((noteItem, index) => {
         return (
           <Note
             key={index}
@@ -39,10 +36,10 @@ function App() {
           />
         );
       })}
-
       <Footer />
     </div>
   );
 }
 
 export default App;
+
