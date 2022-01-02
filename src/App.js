@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Header from "./Header";
+import Footer from "./Footer";
+import Note from "./Note";
+import CreateArea from "./CreateArea";
 
 function App() {
+  const [noteList, setNoteList] = useState([]);
+
+  function handleAdd(currText) {
+    if (currText.title === "" || currText.content === "") {
+      alert("title/content missing");
+    } else {
+      setNoteList((prevList) => {
+        return [...prevList, currText];
+      });
+    }
+  }
+
+  function deleteNote(id) {
+    setNoteList((prevList) => {
+       return prevList.filter((noteItem, index) => {
+        return index !== id;
+      });
+    });
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <CreateArea addClick={handleAdd} />
+      {noteList.map((noteItem, index) => {
+        return (
+          <Note
+            key={index}
+            id={index}
+            title={noteItem.title}
+            content={noteItem.content}
+            onDelete={deleteNote}
+          />
+        );
+      })}
+
+      <Footer />
     </div>
   );
 }
